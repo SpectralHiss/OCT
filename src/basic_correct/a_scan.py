@@ -19,7 +19,7 @@ def grayscale_range_stretch(nparr):
 def grayscale_range_histogram(nparr):
   pass
 
-class Correct:
+class AScan:
   def __init__(self, directory):
     self.directory = directory
     self.read_ref()
@@ -35,14 +35,17 @@ class Correct:
     deconv =  [spectrum[i]/self.ref_spectrum[i] for i in range(1024)]
     
     np_deconv = np.array(deconv)
-    
     np_deconv = np_deconv - np.mean(np_deconv)
+
     spline = interpolate.splrep(np.arange(0,1024), np_deconv, s=0)
     xnew = np.array(self.resampling_table)
-    interpolated_spectrum = interpolate.splev(xnew,spline)
+    self.interpolated_spectrum = interpolate.splev(xnew,spline)
+    return self.correction_method()
 
+  def correction_method(self):
     blackman = np.blackman(1024)
-    windowed = [ interpolated_spectrum[i]/blackman[i] for i in range(1024) ]
+    windowed = [ (self.interpolated_spectrum[i] * blackman[i]) for i in range(1024) ]
 
-    powervals = np.absolute(fftpack.fft(interpolated_spectrum[0:512]))
+    powervals = np.absolute(fftpack.fft(windowed)[0:512])
+    powervals = 20* np.log(powervals * powervals)
     return grayscale_range_stretch(powervals).astype("int")
