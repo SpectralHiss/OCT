@@ -11,10 +11,6 @@ def read_csv_rows_as_array(csv_path):
         return [ float(row[1]) for row in stream]
 
 
-def grayscale_range_stretch(nparr):
-  minv = nparr.min()
-  maxv = nparr.max()
-  return ((255/(maxv - minv)) * (nparr - minv))
 
 def grayscale_range_histogram(nparr):
   pass
@@ -31,21 +27,38 @@ class AScan:
   def read_resampling(self):
     self.resampling_table = read_csv_rows_as_array(path.join(self.directory,"resamplingTable.csv"))
 
-  def a_scan(self, spectrum):
-    deconv =  [spectrum[i]/self.ref_spectrum[i] for i in range(1024)]
+  #TODO: find better refactor
+  def deconv_method(self,spectrum):
+    blackman = np.blackman(1024)
+    windowed = [ (spectrum[i] * blackman[i]) for i in range(len(spectrum)) ]
+
+    # method by which the source spectrum is deconvolved from IOCT signal
+    deconv =  [windowed[i]/self.ref_spectrum[i] for i in range(len(spectrum))]
     
     np_deconv = np.array(deconv)
-    np_deconv = np_deconv - np.mean(np_deconv)
+    return np_deconv - np.mean(np_deconv)
+  
+  def a_scan(self, spectrum):
+    np_deconv = self.deconv_method(spectrum)
 
     spline = interpolate.splrep(np.arange(0,1024), np_deconv, s=0)
     xnew = np.array(self.resampling_table)
     self.interpolated_spectrum = interpolate.splev(xnew,spline)
     return self.correction_method()
 
-  def correction_method(self):
-    blackman = np.blackman(1024)
-    windowed = [ (self.interpolated_spectrum[i] * blackman[i]) for i in range(1024) ]
+  def fftenvelope(self,spectrum):
+    return np.absolute(fftpack.fft(spectrum)[0:512])
 
-    powervals = np.absolute(fftpack.fft(windowed)[0:512])
-    powervals = 20* np.log(powervals * powervals)
-    return grayscale_range_stretch(powervals).astype("int")
+  #TODO: move in
+  def grayscale_range_stretch(self,nparr):
+    minv = nparr.min()
+    maxv = nparr.max()
+    return ((255/(maxv - minv)) * (nparr - minv))
+
+  def to_grayscale(self,signal):
+    powervals = 20* np.log(signal * signal)
+    return self.grayscale_range_stretch(powervals)
+
+  def correction_method(self):
+    signal = self.fftenvelope(self.interpolated_spectrum)
+    return self.to_grayscale(signal).astype("int")

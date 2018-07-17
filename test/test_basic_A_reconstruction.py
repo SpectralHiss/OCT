@@ -51,7 +51,7 @@ class TestBasicA:
     c = method.AScan(a_test_data_dir)
     out = c.a_scan(spectrum)
     desired = self.read_first_A_scan(a_test_data_dir)
-    
+
     assert(len(desired) == 512)
     assert(len(out) == len(desired))
     assert self.within_e_RMSE(desired, out,20* 1024)
