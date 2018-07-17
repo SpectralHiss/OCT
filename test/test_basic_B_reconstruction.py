@@ -11,7 +11,13 @@ import pdb
 
 class TestBasicB:
   
+
   data_dir = path.join(os.getcwd() , "../data")
+  subdirs = [subdir for subdir in os.listdir(data_dir)]
+  a_test_data_dir = path.join(data_dir,subdirs[int(random.random()* len(subdirs))])
+
+  def set_data_dir(self,custom_data_dir):
+    self.a_test_data_dir = custom_data_dir
 
   def read_short(self,f):
     bytes = f.read(2)
@@ -55,15 +61,13 @@ class TestBasicB:
     print("RMSE",RMSE)
     return RMSE < e
 
-  def test_basic_B_reconstruction(self):
-    subdirs = [subdir for subdir in os.listdir(self.data_dir)]
-    a_test_data_dir = path.join(self.data_dir,subdirs[int(random.random()* len(subdirs))])
+  def test_basic_B_reconstruction(self,method=bc):
 
-    spectrums = self.read_all_spectrums(a_test_data_dir)
+    spectrums = self.read_all_spectrums(self.a_test_data_dir)
 
-    BScan = bc.BScan(a_test_data_dir)
+    BScan = method.BScan(self.a_test_data_dir)
     out = BScan.b_scan(spectrums)
-    desired = self.read_first_B_scan(a_test_data_dir)
+    desired = self.read_first_B_scan(self.a_test_data_dir)
     
     assert(len(out) == len(desired))
     assert self.within_e_RMSE_IMG(desired, out,20* 1024 * 500)
