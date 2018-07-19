@@ -1,9 +1,8 @@
-from .a_scan import AScan 
+from .a_scan import AScan as ReshapeAScan
+import src.basic_correct.b_scan as bbscan
 import numpy as np
 
-class BScan():
-    def __init__(self,a_test_data_dir):
-      self.test_dir = a_test_data_dir
-
-    def b_scan(self,spectrums):
-      return np.transpose([AScan(self.test_dir).a_scan(spectrums[i]) for i in range(len(spectrums)) ])
+class BScan(bbscan.BScan):  
+  def b_scan(self,index):
+    spectrums = self.read_B_spectrums(self.test_dir,0)
+    return np.transpose([ReshapeAScan(self.conf.ref_spectrum,self.conf.resampling_table,self.conf.range).a_scan(spectrums[i]) for i in range(self.conf.numB) ])

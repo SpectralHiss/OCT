@@ -7,5 +7,5 @@ import test.test_basic_B_reconstruction as basicmod
 
 class TestReshapeB(basicmod.TestBasicB):
   
-  def test_reshape_B_reconstruction(self):
-    self.test_basic_B_reconstruction(method=bc)
+  def test_B_reconstruction(self):
+    super().test_B_reconstruction(method=bc,tolerance=10000)

@@ -8,7 +8,7 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 import pdb
-
+import src.conf.conf as conf
 
 class TestBasicA:
   data_dir = path.join(os.getcwd() , "../data")
@@ -42,16 +42,18 @@ class TestBasicA:
     print("RMSE",RMSE )
     return RMSE < e
 
-  def test_basic_A_reconstruction(self, method=asc):
+  def test_A_reconstruction(self, method=asc):
     subdirs = [subdir for subdir in os.listdir(self.data_dir)]
     a_test_data_dir = path.join(self.data_dir,subdirs[int(random.random()* len(subdirs))])
 
     spectrum = self.read_first_spectrum(a_test_data_dir)
+    config = conf.Conf(a_test_data_dir)
 
-    c = method.AScan(a_test_data_dir)
+    c = method.AScan(config.ref_spectrum,config.resampling_table,config.range)
+
     out = c.a_scan(spectrum)
     desired = self.read_first_A_scan(a_test_data_dir)
 
     assert(len(desired) == 512)
     assert(len(out) == len(desired))
-    assert self.within_e_RMSE(desired, out,200)
+    assert self.within_e_RMSE(desired, out,2000)

@@ -41,13 +41,12 @@ class TestBasicB:
     print("RMSE",RMSE)
     return RMSE < e
 
-  def test_basic_B_reconstruction(self,method=bc):
+  def test_B_reconstruction(self,method=bc,tolerance=1024):
     desired = self.read_first_B_scan(self.a_test_data_dir)
-
 
     BScan = method.BScan(self.a_test_data_dir)
     out = BScan.b_scan(0)
    
     
     assert(len(out) == len(desired))
-    assert self.within_e_RMSE_IMG(desired, out,1024)
+    assert self.within_e_RMSE_IMG(desired, out,tolerance)

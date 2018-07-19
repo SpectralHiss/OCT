@@ -6,6 +6,8 @@ import os.path as path
 import random
 import pdb
 import matplotlib.pyplot as plt
+import src.conf.conf as conf
+
 
 class TestCompareMethods():
     
@@ -16,19 +18,16 @@ class TestCompareMethods():
         subdir = 'tooth'
         test_dir = path.join(data_dir,subdir)
 
-
         BScan2 = asc.BScan(test_dir)
  
 
         BScan_orig = basc.TestBasicB().read_first_B_scan(test_dir)
 
-        spectrums = basc.TestBasicB().read_all_first_spectrums(test_dir)
-
-        out2 = BScan2.b_scan(spectrums)
+        out2 = BScan2.b_scan(0)
         BScan = bc.BScan(test_dir)
-        out1 = BScan.b_scan(spectrums)
+        out1 = BScan.b_scan(0)
 
-
+        
         plt.subplot(131)
         plt.imshow(out1)
         plt.subplot(132)
