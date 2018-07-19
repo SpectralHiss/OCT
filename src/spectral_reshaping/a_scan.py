@@ -25,7 +25,7 @@ def dz_relation(ym_1,ym,ym1):
   if ym1 > ym_1:
     return (2 * ym1 - ym) / (ym + ym1)
   else:
-    return (ym - 2* ym_1) / (ym + ym_1)  
+    return (ym - 2* ym_1) / (ym + ym_1)
 
 class AScan(AScan):
 

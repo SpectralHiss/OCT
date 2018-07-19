@@ -1,12 +1,12 @@
 import os
 import os.path as path
 import csv
-
+import numpy as np
 
 def read_csv_rows_as_array(csv_path):
   with open(csv_path, 'r') as f:
       stream = csv.reader(f, delimiter=',')
-      return [ float(row[1]) for row in stream]
+      return np.float32([ float(row[1]) for row in stream])
 
 def read_csv_as_dict(csv_path):
   conf = {}
@@ -41,8 +41,8 @@ class Conf:
   def read_range(self):
     self.param_csv = read_csv_as_dict(path.join(self.test_dir,"parameters.csv"))
     self.range = {}
-    self.range['min'] = int(self.param_csv["Min. Value"]) 
-    self.range['max'] = int(self.param_csv["Max. Value"])
+    self.range['min'] = float(self.param_csv["Min. Value"]) 
+    self.range['max'] = float(self.param_csv["Max. Value"])
 
   def read_B_width(self):
     self.B_width = int(self.param_csv["Total number of A-Scans per B-Scan"])

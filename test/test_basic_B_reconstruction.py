@@ -46,7 +46,7 @@ class TestBasicB:
 
     BScan = method.BScan(self.a_test_data_dir)
     out = BScan.b_scan(0)
-   
+    pdb.set_trace()
     
     assert(len(out) == len(desired))
     assert self.within_e_RMSE_IMG(desired, out,tolerance)

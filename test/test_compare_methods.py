@@ -7,7 +7,7 @@ import random
 import pdb
 import matplotlib.pyplot as plt
 import src.conf.conf as conf
-
+import numpy as np
 
 class TestCompareMethods():
     
@@ -27,7 +27,7 @@ class TestCompareMethods():
         BScan = bc.BScan(test_dir)
         out1 = BScan.b_scan(0)
 
-        
+        pdb.set_trace()
         plt.subplot(131)
         plt.imshow(out1)
         plt.subplot(132)

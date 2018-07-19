@@ -2,8 +2,8 @@ import numpy as np
 from scipy import interpolate
 from scipy import fftpack
 from scipy import signal
+import math
 import pdb
-
 
 
 def grayscale_range_histogram(nparr):
@@ -15,39 +15,60 @@ class AScan:
     self.resampling_table = resample
     self.range = imrange
 
-
+  def deconv_threshold(self,spectrum_val,ref_val):
+    
+    return ( spectrum_val/ ref_val)
+    
+    if ref_val> 0.1:
+      return float(spectrum_val / ref_val) - 1.0
+    else:
+      return 0.0
+    
   def deconv_method(self,spectrum):
     
-    nuttall = signal.nuttall(1024)
-    windowed = [ (spectrum[i] * nuttall[i]) for i in range(len(spectrum)) ]
-    
     # method by which the source spectrum is deconvolved from IOCT signal
-    deconv =  [windowed[i]/self.ref_spectrum[i] for i in range(len(spectrum))]
+    deconv =  [ self.deconv_threshold(spectrum[i],self.ref_spectrum[i]) for i in range(len(spectrum))]
     
-    np_deconv = np.array(deconv)
+    nuttall = signal.nuttall(1024)
+    windowed = [ (deconv[i] * nuttall[i]) for i in range(len(spectrum)) ]
+
+    np_deconv = np.array(windowed,dtype='float32')
+    #pdb.set_trace()
     return np_deconv - np.mean(np_deconv)
   
   def a_scan(self, spectrum):
     np_deconv = self.deconv_method(spectrum)
 
     spline = interpolate.splrep(np.arange(0,1024), np_deconv, s=0)
-    xnew = np.array(self.resampling_table)
-    self.interpolated_spectrum = interpolate.splev(xnew,spline)
+    xnew = np.array(self.resampling_table, dtype='float32')
+    self.interpolated_spectrum = np.float32(interpolate.splev(xnew,spline))
     return self.correction_method()
 
+
   def fftenvelope(self,spectrum):
-    return np.absolute(fftpack.fft(spectrum)[0:512])
+    positive_complex_freqs = fftpack.fft(spectrum)[0:512]
+    # current envelope algo is naive..
+    return np.absolute(positive_complex_freqs) 
+
+  def clip(self,val):
+    if val > 255:
+      return 255
+    if val <= 0:
+      return 0
+    else: return int(val)
 
   def grayscale_range_stretch(self,nparr):
     minv = self.range['min']
     maxv = self.range['max']
-    span = maxv - minv
+    span = float(maxv - minv)
     #pdb.set_trace()
-    return np.array([grayscale for grayscale in ((span/(255)) * (nparr - minv))])
+    return np.array([self.clip(grayscale) for grayscale in ((span/255) * (nparr - np.min(nparr)))], dtype='float32')
 
   def to_grayscale(self,signal):
-    powervals = 20* np.log(signal * signal)
-    return self.grayscale_range_stretch(powervals)
+    powervals = float(20)* np.log10(signal * signal, dtype='float32')
+    out =  self.grayscale_range_stretch(powervals)
+    #pdb.set_trace()
+    return out - np.mean(out)
 
   def correction_method(self):
     signal = self.fftenvelope(self.interpolated_spectrum)
