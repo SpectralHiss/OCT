@@ -8,20 +8,26 @@ import pdb
 import matplotlib.pyplot as plt
 
 class TestCompareMethods():
+    
     def test_side_by_side(self):
         data_dir = path.join(os.getcwd() , "../data")
         subdirs = [subdir for subdir in os.listdir(data_dir)]
-        test_dir = path.join(data_dir,subdirs[int(random.random()* len(subdirs))])
+        #subdir = subdirs[int(random.random()* len(subdirs))]
+        subdir = 'tooth'
+        test_dir = path.join(data_dir,subdir)
 
-        spectrums = basc.TestBasicB().read_all_spectrums(test_dir)
 
+        BScan2 = asc.BScan(test_dir)
+ 
+
+        BScan_orig = basc.TestBasicB().read_first_B_scan(test_dir)
+
+        spectrums = basc.TestBasicB().read_all_first_spectrums(test_dir)
+
+        out2 = BScan2.b_scan(spectrums)
         BScan = bc.BScan(test_dir)
         out1 = BScan.b_scan(spectrums)
 
-        BScan2 = asc.BScan(test_dir)
-        out2 = BScan2.b_scan(spectrums)
-
-        BScan_orig = basc.TestBasicB().read_first_B_scan(test_dir)
 
         plt.subplot(131)
         plt.imshow(out1)

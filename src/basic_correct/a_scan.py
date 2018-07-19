@@ -44,12 +44,12 @@ class AScan:
 
   #TODO: find better refactor
   def deconv_method(self,spectrum):
-    '''
+    
     nuttall = signal.nuttall(1024)
     windowed = [ (spectrum[i] * nuttall[i]) for i in range(len(spectrum)) ]
-    '''
+    
     # method by which the source spectrum is deconvolved from IOCT signal
-    deconv =  [spectrum[i]/self.ref_spectrum[i] for i in range(len(spectrum))]
+    deconv =  [windowed[i]/self.ref_spectrum[i] for i in range(len(spectrum))]
     
     np_deconv = np.array(deconv)
     return np_deconv - np.mean(np_deconv)
@@ -65,19 +65,12 @@ class AScan:
   def fftenvelope(self,spectrum):
     return np.absolute(fftpack.fft(spectrum)[0:512])
 
-  def clip(self,val):
-    if(val > 255):
-      return 255
-    if(val < 0):
-      return 0
-    return val
-
   def grayscale_range_stretch(self,nparr):
     minv = self.range['min']
     maxv = self.range['max']
     span = maxv - minv
-    pdb.set_trace()
-    return np.array([self.clip(grayscale) for grayscale in ((255/(span)) * (nparr - minv))])
+    #pdb.set_trace()
+    return np.array([grayscale for grayscale in ((span/(255)) * (nparr - minv))])
 
   def to_grayscale(self,signal):
     powervals = 20* np.log(signal * signal)
