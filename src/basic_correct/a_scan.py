@@ -1,48 +1,21 @@
 import numpy as np
-import csv
-import os.path as path
 from scipy import interpolate
 from scipy import fftpack
 from scipy import signal
 import pdb
 
-def read_csv_rows_as_array(csv_path):
-  with open(csv_path, 'r') as f:
-      stream = csv.reader(f, delimiter=',')
-      return [ float(row[1]) for row in stream]
 
-def read_csv_as_dict(csv_path):
-  conf = {}
-  with open(csv_path,'r') as f:
-    stream = csv.reader(f, delimiter=',')
-    for row in stream:
-      conf[row[0]] = row[1]
-
-  return conf
 
 def grayscale_range_histogram(nparr):
   pass
 
 class AScan:
-  def __init__(self, directory):
-    self.directory = directory
-    self.read_ref()
-    self.read_resampling()
-    self.read_range()
+  def __init__(self,ref_spectrum,resample,imrange):
+    self.ref_spectrum = ref_spectrum
+    self.resampling_table = resample
+    self.range = imrange
 
-  def read_ref(self):
-    self.ref_spectrum = read_csv_rows_as_array(path.join(self.directory,"referenceSpectrum.csv"))
 
-  def read_resampling(self):
-    self.resampling_table = read_csv_rows_as_array(path.join(self.directory,"resamplingTable.csv"))
-
-  def read_range(self):
-    conf = read_csv_as_dict(path.join(self.directory,"parameters.csv"))
-    self.range = {}
-    self.range['min'] = int(conf["Min. Value"]) 
-    self.range['max'] = int(conf["Max. Value"])
-
-  #TODO: find better refactor
   def deconv_method(self,spectrum):
     
     nuttall = signal.nuttall(1024)

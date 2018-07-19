@@ -15,31 +15,9 @@ class TestBasicB:
   data_dir = path.join(os.getcwd() , "../data")
   subdirs = [subdir for subdir in os.listdir(data_dir)]
   a_test_data_dir = path.join(data_dir,subdirs[int(random.random()* len(subdirs))])
-  im_width = 500
 
   def set_data_dir(self,custom_data_dir):
     self.a_test_data_dir = custom_data_dir
-
-  def read_short(self,f):
-    bytes = f.read(2)
-    short = int.from_bytes(bytes,byteorder='little')
-    return short
-
-  def read_all_first_spectrums(self,test_dir):
-    print(test_dir)
-    with open(path.join(test_dir,"Spectra.bin"), 'rb') as f:
-      spectrums = []
-      # TODO: generalise /refactor
-      a_scan_i = 0
-      while a_scan_i < self.im_width:
-        temp_spectrum = []
-        i = 0
-        while i < 1024:
-          temp_spectrum.append(self.read_short(f))
-          i = i +1
-        a_scan_i = a_scan_i+1
-        spectrums.append(temp_spectrum)
-    return spectrums
 
   def read_first_B_scan(self,a_test_data_dir):
     im = Image.open(path.join(a_test_data_dir,"B-Scans/OCTImage0000.png"))
@@ -65,10 +43,10 @@ class TestBasicB:
 
   def test_basic_B_reconstruction(self,method=bc):
     desired = self.read_first_B_scan(self.a_test_data_dir)
-    spectrums = self.read_all_first_spectrums(self.a_test_data_dir)
+
 
     BScan = method.BScan(self.a_test_data_dir)
-    out = BScan.b_scan(spectrums)
+    out = BScan.b_scan(0)
    
     
     assert(len(out) == len(desired))
