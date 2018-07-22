@@ -1,13 +1,11 @@
-import test.test_basic_B_reconstruction as basc
-import PIL
-from PIL import ImageFilter
-import src.CNR.cnr
-
 import random
 import os
 import os.path as path
-import src.CNR.cnr as cnr
+import PIL
+from PIL import ImageFilter
 
+import src.CNR.cnr as cnr
+import src.basic_correct.b_scan as bc
 
 import numpy as np
 import pdb
@@ -22,8 +20,9 @@ def test_CNR_computation():
   subdir = 'tooth'
   test_dir = path.join(data_dir,subdir)
 
-  BScan_orig = basc.TestBasicB().read_first_B_scan(test_dir)
-  print(cnr.CNR(BScan_orig))
+  BScan_orig = bc.BScan(test_dir).b_scan(0)
+
+  #print(cnr.CNR(BScan_orig))
 
   Bscan = BScan_orig * random.random() + random.random() * 255.0
 
