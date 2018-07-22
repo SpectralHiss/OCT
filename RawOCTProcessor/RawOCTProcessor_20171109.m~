@@ -236,8 +236,8 @@ for r=startRepeat:skipRepeat:endRepeat
         end
         disp('Done.');
         % WARNING ADDED TO CALL ProcessOCTBscan.m
-        a = ProcessOCTBScan(spectra,resamplingTable,referenceSpectrum, referenceAScan,strayLight,window)
-        %{
+        %a = ProcessOCTBScan(spectra,resamplingTable,referenceSpectrum, referenceAScan,strayLight,window)
+        
        
         
         

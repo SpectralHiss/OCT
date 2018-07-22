@@ -44,7 +44,9 @@ class TestBasicA:
 
   def test_A_reconstruction(self, method=asc):
     subdirs = [subdir for subdir in os.listdir(self.data_dir)]
-    a_test_data_dir = path.join(self.data_dir,subdirs[int(random.random()* len(subdirs))])
+    #subdir = subdirs[int(random.random()* len(subdirs))]
+    subdir = "tooth"
+    a_test_data_dir = path.join(self.data_dir,subdir)
 
     spectrum = self.read_first_spectrum(a_test_data_dir)
     config = conf.Conf(a_test_data_dir)

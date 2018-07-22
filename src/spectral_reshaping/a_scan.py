@@ -32,9 +32,9 @@ class AScan(AScan):
   def deconv_method(self,spectrum):
     hann = np.hanning(len(spectrum))
     hann_reshape =  [ hann[i] / self.ref_spectrum[i] for i in range(len(self.ref_spectrum))]
-
     deconv = [ spectrum[i] * hann_reshape[i] for i in range(len(spectrum)) ]
-    return deconv - np.mean(deconv)
+
+    return deconv
 
   def correction_method(self):
     powervals = self.fftenvelope(self.interpolated_spectrum)

@@ -2,8 +2,7 @@ import test.test_basic_B_reconstruction as basc
 import PIL
 from PIL import ImageFilter
 import src.CNR.cnr
-from scipy import fftpack
-import math
+
 import random
 import os
 import os.path as path
@@ -30,4 +29,4 @@ def test_CNR_computation():
 
   pilimg = PIL.Image.fromarray(Bscan.astype("float")).convert('RGB')
   im1 = pilimg.filter(ImageFilter.BLUR)
-  assert(cnr.CNR(np.asarray(im1.convert('LA'))[:,:,0])  < cnr.CNR(BScan_orig))
+  assert(cnr.CNR(np.asarray(im1.convert('LA'))[:,:,0])  < cnr.CNR(BScan_orig))    
