@@ -22,10 +22,12 @@ def test_CNR_computation():
 
   BScan_orig = bc.BScan(test_dir).b_scan(0)
 
-  #print(cnr.CNR(BScan_orig))
-
   Bscan = BScan_orig * random.random() + random.random() * 255.0
 
   pilimg = PIL.Image.fromarray(Bscan.astype("float")).convert('RGB')
   im1 = pilimg.filter(ImageFilter.BLUR)
-  assert(cnr.CNR(np.asarray(im1.convert('LA'))[:,:,0])  < cnr.CNR(BScan_orig))    
+  blurred_CNR = cnr.CNR(np.asarray(im1.convert('LA'))[:,:,0])
+  orig_CNR = cnr.CNR(BScan_orig)
+
+  print("CNRS obtained for orig and blurred %3.f %3.f", orig_CNR,blurred_CNR)
+  assert(orig_CNR > blurred_CNR)    

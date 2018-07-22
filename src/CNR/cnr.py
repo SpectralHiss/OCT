@@ -51,5 +51,4 @@ def CNR(nparr_img,method=2):
   fg_hard = np.argmax(means)
   fg_soft = set(range(num_segs)).difference([bg_noise,fg_hard]).pop()
   CNR = (means[fg_hard] - means[fg_soft]) / means[bg_noise]
-  
   return CNR  
