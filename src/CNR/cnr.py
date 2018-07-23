@@ -2,15 +2,15 @@ import PIL
 from PIL import ImageFilter
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
-from skimage.filters import sobel
+from skimage.filters import scharr 
 from skimage import color,morphology
 import numpy as np
 import pdb
 
 num_segs = 3
-DEBUG = False
+DEBUG = True
 
-#TODO: Adjust weights with  Xvalidation?
+#TODO: Compare to OTSU thresholding?
 def CNR(nparr_img,method=2):
   pilimg = PIL.Image.fromarray(nparr_img.astype("float")).convert('RGB')
   im1 = pilimg.filter(ImageFilter.MedianFilter(15))
@@ -36,10 +36,9 @@ def CNR(nparr_img,method=2):
   if DEBUG:
     [_,ax] = plt.subplots(1,3)
     ax[0].imshow(color.label2rgb(seg_map,numpy_img))
-    ax[1].imshow(sobel(numpy_img))
+    ax[1].imshow(scharr(numpy_img))
     ax[2].imshow(numpy_img)
     plt.show()
-    pdb.set_trace()
 
   regions = [[] for k in range(num_segs)]
   for row in range(len(numpy_img)):
