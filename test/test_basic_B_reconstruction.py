@@ -48,4 +48,5 @@ class TestBasicB:
     out = BScan.b_scan(0)
     
     assert(len(out) == len(desired))
+    #pdb.set_trace()
     assert self.within_e_RMSE_IMG(desired, out,tolerance)

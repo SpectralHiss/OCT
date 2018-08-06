@@ -19,7 +19,10 @@ class BScan():
   def read_B_spectrums(self,test_dir,index):
     print(test_dir)
     assert(index < self.conf.numB)
-
+    '''
+    if(!hasattr(self,spectra_file)):
+      self.spectra_file = open(path.join(test_dir,"Spectra.bin"), 'rb')
+    '''
     with open(path.join(test_dir,"Spectra.bin"), 'rb') as f:
       f.seek(index * self.conf.B_width * self.conf.spectrum_size)
       spectrums = []
