@@ -56,20 +56,6 @@ class AScan:
       return 0
     else: return int(val)
 
-  def grayscale_range_stretch(self,nparr):
-    maxv = self.range['max']
-    minv = -90 # np.min(nparr)
-    maxv = 10
-    span = 110
-    out = np.array([self.clip(grayscale) for grayscale in ((span/255) * (nparr - minv ))], dtype='int')
-    return out
-
-
-  def to_grayscale(self,signal):
-    powervals = 20 * np.log10(signal * signal , dtype='float32')
-    out =  self.grayscale_range_stretch(powervals)
-    return out
-
   def correction_method(self):
     signal = self.fftenvelope(self.deconv_interpolated_spectrum)
-    return self.to_grayscale(signal).astype("int")
+    return signal

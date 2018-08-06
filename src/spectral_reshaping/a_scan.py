@@ -31,15 +31,6 @@ def dz_relation(ym_1,ym,ym1):
     return (ym - 2* ym_1) / (ym + ym_1) * Dz
 
 class AScan(AScan):
-  
-  def grayscale_range_stretch(self,nparr):
-    hist,_ = np.histogram(nparr,1000)
-    minv = -90 # np.min(nparr)
-    maxv = 10
-    span = 110
-    out = np.array([self.clip(grayscale) for grayscale in ((span/255) * (nparr - minv ))], dtype='int')
-    #pdb.set_trace()
-    return out
 
   def deconv_method(self,spectrum):
     hann = np.hanning(len(spectrum))
@@ -51,4 +42,4 @@ class AScan(AScan):
   def correction_method(self):
     powervals = self.fftenvelope(self.deconv_interpolated_spectrum)
     crisp_signal = bary_interpolation(powervals)
-    return self.to_grayscale(crisp_signal).astype("int")
+    return crisp_signal # self.to_grayscale(crisp_signal).astype("int")

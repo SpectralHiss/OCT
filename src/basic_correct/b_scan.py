@@ -1,5 +1,6 @@
 from .a_scan import AScan 
 import src.conf.conf as conf
+import src.ADC.contrast_stretch_ADC as ADC
 import numpy as np
 import os
 import os.path as path
@@ -12,9 +13,10 @@ def read_short(f):
 
 class BScan():
 
-  def __init__(self, directory):
+  def __init__(self, directory,ADC=ADC.ADC()):
     self.test_dir = directory
     self.conf = conf.Conf(directory)
+    self.ADC = ADC
 
   def read_B_spectrums(self,test_dir,index):
     print(test_dir)
@@ -40,4 +42,6 @@ class BScan():
 
   def b_scan(self,index):
     spectrums = self.read_B_spectrums(self.test_dir,index)
-    return np.transpose([AScan(self.conf.ref_spectrum,self.conf.resampling_table,self.conf.range).a_scan(spectrums[i]) for i in range(self.conf.B_width) ])
+    range_data = np.transpose([AScan(self.conf.ref_spectrum,self.conf.resampling_table,self.conf.range).a_scan(spectrums[i]) for i in range(self.conf.B_width) ])
+    img = self.ADC.to_img(range_data)
+    return img
