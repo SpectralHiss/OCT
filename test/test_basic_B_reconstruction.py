@@ -14,8 +14,10 @@ class TestBasicB:
 
   data_dir = path.join(os.getcwd() , "../data")
   subdirs = [subdir for subdir in os.listdir(data_dir)]
-  a_test_data_dir = path.join(data_dir,subdirs[int(random.random()* len(subdirs))])
-
+  #a_test_data_dir = path.join(data_dir,subdirs[int(random.random()* len(subdirs))])
+  subdir = 'tooth'
+  a_test_data_dir = path.join(data_dir,subdir)
+  
   def set_data_dir(self,custom_data_dir):
     self.a_test_data_dir = custom_data_dir
 
