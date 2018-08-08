@@ -7,10 +7,6 @@ import pdb
 
 import matplotlib.pyplot as plt
 
-
-def grayscale_range_histogram(nparr):
-  pass
-
 class AScan:
   def __init__(self,ref_spectrum,resample,imrange):
     self.ref_spectrum = ref_spectrum
@@ -48,13 +44,6 @@ class AScan:
   def fftenvelope(self,spectrum):
     positive_complex_freqs = fftpack.fft(spectrum)[0:512]
     return np.abs(positive_complex_freqs)
-
-  def clip(self,val):
-    if val > 255:
-      return 255
-    if val <= 0:
-      return 0
-    else: return int(val)
 
   def correction_method(self):
     signal = self.fftenvelope(self.deconv_interpolated_spectrum)

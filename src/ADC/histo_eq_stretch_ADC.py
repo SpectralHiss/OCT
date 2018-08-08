@@ -4,6 +4,7 @@ ADC conversion need to happen at B-Scan level to provide adequate dynamic range.
 import numpy as np
 import pdb
 import matplotlib.pyplot as plt
+import math
 
 class ADC:
   def to_img(self,np_b_scan):
@@ -11,16 +12,26 @@ class ADC:
     return self.grayscale_range_stretch(powervals)
     
   def grayscale_range_stretch(self,np_b_scan):
+    val_range =  (np_b_scan - np.min(np_b_scan)).astype('int')
+    hist , _ = np.histogram(val_range,255)
+    norm_hist = hist / sum(hist)
+    pdb.set_trace()
+    cumul_hist = []
+    for i,val in enumerate(norm_hist):
+      if i >= 1:
+        cumul_hist.append(cumul_hist[i-1] + val)
+      else:
+        cumul_hist = [val]
+    pdb.set_trace()
+    eq_img = []
+    for pixel in val_range.flatten():
+      #TODO del
+      if pixel == 255:
+        eq_img.append(255)
+      else:
+        eq_img.append(math.floor(255 *(cumul_hist[pixel.astype("int")]) + 0.5))
 
-    hist, _ = np.histogram(np_b_scan)
-    pdb.set_trace()
-    #minv = np.min(np_b_scan)
-    minv = -90 # np.min(nparr)
-    span = 110
-    out = 255 / span * (np_b_scan - minv)
-    pdb.set_trace()
-    return np.array(out,dtype='int')
+    return np.reshape(np.array(eq_img), (len(np_b_scan),len(np_b_scan[0])))
 
   def power_spectrum(self,signal):
-    pdb.set_trace()
     return 20 * np.log10(signal * signal , dtype='float32')
