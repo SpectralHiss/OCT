@@ -33,6 +33,8 @@ class AScan:
     return np_deconv
   
   def a_scan(self, spectrum):
+
+    #pdb.set_trace()
     np_deconv = self.deconv_method(spectrum)
 
     spline = interpolate.splrep(np.arange(0,1024), np_deconv, s=0)
@@ -41,10 +43,10 @@ class AScan:
     return self.correction_method()
 
 
-  def fftenvelope(self,spectrum):
+  def range_envelope(self,spectrum):
     positive_complex_freqs = fftpack.fft(spectrum)[0:512]
     return np.abs(positive_complex_freqs)
 
   def correction_method(self):
-    signal = self.fftenvelope(self.deconv_interpolated_spectrum)
+    signal = self.range_envelope(self.deconv_interpolated_spectrum)
     return signal

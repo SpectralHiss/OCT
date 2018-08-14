@@ -1,9 +1,11 @@
 from src.basic_correct.a_scan import AScan
 import numpy as np
+from scipy import fftpack
 import math
 import pdb
 from scipy import signal as signal_lib
 
+import src.OCTune_processing.fall_off.fall_off_correct as fc
 import matplotlib.pyplot as plt
 
 def bary_interpolation(signal):
@@ -37,9 +39,14 @@ class AScan(AScan):
     hann_reshape =  [ hann[i] / self.ref_spectrum[i] for i in range(len(self.ref_spectrum))]
     deconv = [ spectrum[i] * hann_reshape[i] for i in range(len(spectrum)) ]
 
-    return deconv
+    return deconv - np.mean(deconv)
+
+  def range_envelope(self,spectrum):
+    positive_real_freqs = fftpack.fft(spectrum)[0:512]
+    #positive_real_freqs = fftpack.idct(spectrum,type=1)
+    return fc.fall_off_correct(np.abs(positive_real_freqs[5:]))
 
   def correction_method(self):
-    powervals = self.fftenvelope(self.deconv_interpolated_spectrum)
+    powervals = self.range_envelope(self.deconv_interpolated_spectrum)
     crisp_signal = bary_interpolation(powervals)
     return crisp_signal # self.to_grayscale(crisp_signal).astype("int")

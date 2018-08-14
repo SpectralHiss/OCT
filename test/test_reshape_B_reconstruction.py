@@ -2,7 +2,7 @@ import random
 import math
 import os
 import os.path as path
-import src.spectral_reshaping.b_scan as bc
+import src.OCTune_processing.b_scan as bc
 import test.test_basic_B_reconstruction as basicmod
 
 class TestReshapeB(basicmod.TestBasicB):

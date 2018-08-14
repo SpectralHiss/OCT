@@ -1,0 +1,11 @@
+import numpy as np
+
+import os
+import os.path as path
+
+
+def fall_off_correct(np_a_scan):
+  inv_coefs = np.loadtxt(path.join(os.path.dirname(__file__),'inv_coefs'))
+  for i in range(507):
+    np_a_scan[i] *= inv_coefs[i]
+  return np_a_scan
