@@ -14,7 +14,7 @@ class BScan(bbscan.BScan):
   def __init__(self,dir):
     super(BScan,self).__init__(dir, ADC.ADC())
 
-  def b_scan(self,index,despeckle=None):
+  def b_scan(self,index,despeckle='bilateral'):
     spectrums = self.read_B_spectrums(self.test_dir,index)
     a_scans = []
     for i in range(self.conf.numB):

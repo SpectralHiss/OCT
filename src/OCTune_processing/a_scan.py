@@ -43,7 +43,7 @@ class AScan(AScan):
 
   def range_envelope(self,spectrum):
     positive_real_freqs = fftpack.fft(spectrum)[0:512]
-    #positive_real_freqs = fftpack.idct(spectrum,type=1)
+    positive_real_freqs = fftpack.idct(spectrum,type=1)
     return fc.fall_off_correct(np.abs(positive_real_freqs[5:]))
 
   def correction_method(self):

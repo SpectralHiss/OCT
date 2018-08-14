@@ -25,21 +25,24 @@ class TestCompareMethods():
 
         BScan_orig = basc.TestBasicB().read_first_B_scan(test_dir)
         reshape_output = reshape.b_scan(0)
-        #reshape_NAWT_despeckle = reshape.b_scan(0,despeckle='NAWT')
+        reshape_NAWT_despeckle = reshape.b_scan(0,despeckle='NAWT')
+        mean_reshape = reshape.b_scan(0,despeckle='simple')
         reshape_Bilateral_despeckle = reshape.b_scan(0,despeckle='bilateral')
         #pdb.set_trace()
+        
         plt.subplot(141)
         plt.imshow(BScan_orig)
         plt.subplot(142)
         plt.imshow(reshape_output)
 
-        #plt.subplot(143)
-        #plt.imshow(reshape_NAWT_despeckleres)
-        #plt.show()
+        plt.subplot(143)
+        plt.imshow(reshape_NAWT_despeckle)
 
         plt.subplot(144)
         plt.imshow(reshape_Bilateral_despeckle)
+        #plt.imshow(mean_reshape)
         plt.show()
+        
         #new_CNR = cnr.CNR(reshape_output)
         #old_CNR = cnr.CNR(basic_output)
         #print("old CNR , new CNR", old_CNR, new_CNR)

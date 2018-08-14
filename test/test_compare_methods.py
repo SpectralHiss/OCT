@@ -28,6 +28,7 @@ class TestCompareMethods():
         basic_reconstruction = bc.BScan(test_dir)
         basic_output = basic_reconstruction.b_scan(0)
         
+        
         #pdb.set_trace()
         plt.subplot(131)
         plt.imshow(basic_output)
@@ -37,7 +38,7 @@ class TestCompareMethods():
         plt.subplot(133)
         plt.imshow(BScan_orig)
         plt.show()
-
+        
         #new_CNR = cnr.CNR(reshape_output)
         #old_CNR = cnr.CNR(basic_output)
         #print("old CNR , new CNR", old_CNR, new_CNR)
