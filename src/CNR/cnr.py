@@ -8,13 +8,13 @@ import numpy as np
 import pdb
 
 num_segs = 3
-DEBUG = False
+DEBUG = True
 
-#TODO: Compare to OTSU thresholding?
 def CNR(nparr_img,method=2):
+  
   pilimg = PIL.Image.fromarray(nparr_img.astype("float")).convert('RGB')
-  im1 = pilimg.filter(ImageFilter.MedianFilter(15))
-
+  im1 = pilimg.filter(ImageFilter.MedianFilter(5))
+  
   numpy_img = np.asarray(im1.convert('L'))
   
   p1 = []
@@ -28,11 +28,11 @@ def CNR(nparr_img,method=2):
       else:
         p1.append([numpy_img[row][column]])
 
-  #kmeans = KMeans(init=np.array([[np.min(numpy_img)], [int(np.median(numpy_img))],[np.max(numpy_img)]]), n_clusters=num_segs)
-  kmeans = KMeans(init='k-means++', n_clusters=num_segs)
+  kmeans = KMeans(init=np.array([[np.min(numpy_img)], [int(np.median(numpy_img))],[np.max(numpy_img)]]), n_clusters=num_segs)
+  #kmeans = KMeans(init='k-means++', n_clusters=num_segs)
   kmeans.fit(p1)
 
-  seg_map = kmeans.labels_.reshape((im1.size)[::-1])
+  seg_map = kmeans.labels_.reshape(im1.size[::-1])
   if DEBUG:
     [_,ax] = plt.subplots(1,3)
     ax[0].imshow(color.label2rgb(seg_map,numpy_img))
@@ -49,7 +49,6 @@ def CNR(nparr_img,method=2):
   bg_noise = np.argmin(means)
   fg_hard = np.argmax(means)
   fg_soft = set(range(num_segs)).difference([bg_noise,fg_hard]).pop()
-  #pdb.set_trace()
   contrast = (means[fg_hard] - means[fg_soft])
   noise = means[bg_noise]
   if noise == 0:

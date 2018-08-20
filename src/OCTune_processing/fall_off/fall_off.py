@@ -5,9 +5,10 @@ from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 import scipy.signal as sg
 import numpy as np
+import math
 
 def func(x, b):
-  return np.exp(-b * x) 
+  return np.sinc(9.5 * math.pow(10,-6) *  x) * np.exp(-b * x / (4 * math.log(2))) 
 
 import pdb
 

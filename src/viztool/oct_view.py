@@ -9,7 +9,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pdb
-import src.basic_correct.b_scan as rbc
+import src.OCTune_processing.b_scan as rbc
+
+import time
+
 
 data_dir = path.join(os.getcwd() , "data")
 subdirs = [subdir for subdir in os.listdir(data_dir)]
@@ -23,4 +26,11 @@ filename = 'testdata.nrrd'
 
 pdb.set_trace()
 
-nrrd.write(filename, volume.Volume(test_dir,rbc).get_np_volume())
+#v = volume.Volume(test_dir, rbc).get_np_volume()
+
+volume = nrrd.read(filename)
+
+#while(True):
+#  d.sendData(volume)
+
+#nrrd.write(filename, volume.Volume(test_dir,rbc).get_np_volume(), {'encoding':'raw','dimension':4})

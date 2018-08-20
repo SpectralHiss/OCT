@@ -16,11 +16,15 @@ class Volume():
     # coordinates ...  y!-> x, z up
     # hence each grab is one horizontal layer
     self.get_volume()
+    vol_absica = []
     #if self.vol_array is None:
-    vol_array = [] #np.array(dtype='ubyte')
     for iz,bscan in enumerate(self.vol_data):
+      vol_ordonne = []
       for iy,scanline in enumerate(bscan):
+        vol_cote = [] #np.array(dtype='ubyte')
         for ix,pixel in enumerate(scanline):
-          vol_array.append((ix,iy,iz, pixel))
-    self.vol_array = vol_array
+          vol_cote.append(pixel)
+        vol_ordonne.append(vol_cote)
+    vol_absica.append(vol_ordonne)
+    self.vol_array = vol_absica
     return np.array(self.vol_array,dtype='ubyte')

@@ -26,7 +26,7 @@ class BScan():
       self.spectra_file = open(path.join(test_dir,"Spectra.bin"), 'rb')
     '''
     with open(path.join(test_dir,"Spectra.bin"), 'rb') as f:
-      f.seek(index * self.conf.B_width * self.conf.spectrum_size)
+      f.seek(index * self.conf.B_width * self.conf.spectrum_size * 2) # reading in 16 bits = 2bytes
       spectrums = []
       # TODO: generalise /refactor
       a_scan_i = 0

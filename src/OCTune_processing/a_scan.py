@@ -37,14 +37,15 @@ class AScan(AScan):
   def deconv_method(self,spectrum):
     hann = np.hanning(len(spectrum))
     hann_reshape =  [ hann[i] / self.ref_spectrum[i] for i in range(len(self.ref_spectrum))]
-    deconv = [ spectrum[i] * hann_reshape[i] for i in range(len(spectrum)) ]
+
+    deconv = [ spectrum[i] * hann_reshape[i] for i in range(len(spectrum))]
 
     return deconv - np.mean(deconv)
 
   def range_envelope(self,spectrum):
-    positive_real_freqs = fftpack.fft(spectrum)[0:512]
-    positive_real_freqs = fftpack.idct(spectrum,type=1)
-    return fc.fall_off_correct(np.abs(positive_real_freqs[5:]))
+    positive_real_freqs = fftpack.fft(spectrum)[1:512]
+    #positive_real_freqs = fftpack.idct(spectrum,type=1)
+    return fc.fall_off_correct(np.abs(positive_real_freqs))[8:]
 
   def correction_method(self):
     powervals = self.range_envelope(self.deconv_interpolated_spectrum)

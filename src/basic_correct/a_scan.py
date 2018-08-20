@@ -44,7 +44,7 @@ class AScan:
 
 
   def range_envelope(self,spectrum):
-    positive_complex_freqs = fftpack.fft(spectrum)[0:512]
+    positive_complex_freqs = fftpack.fft(spectrum)[1:512]
     return np.abs(positive_complex_freqs)
 
   def correction_method(self):
