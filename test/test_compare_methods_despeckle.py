@@ -9,7 +9,7 @@ import numpy as np
 
 import test.test_basic_B_reconstruction as basc
 import src.basic_correct.b_scan as bc
-import src.OCTune_processing.b_scan as rbc
+import src.OCT_tunings.b_scan as rbc
 import src.CNR.cnr as cnr
 
 class TestCompareMethods():
@@ -26,24 +26,36 @@ class TestCompareMethods():
         BScan_orig = basc.TestBasicB().read_first_B_scan(test_dir)
         reshape_output = reshape.b_scan(0)
         reshape_NAWT_despeckle = reshape.b_scan(0,despeckle='NAWT')
-        mean_reshape = reshape.b_scan(0,despeckle='simple')
+
         reshape_Bilateral_despeckle = reshape.b_scan(0,despeckle='bilateral')
-        #pdb.set_trace()
-        
-        plt.subplot(141)
+
+
+        median = reshape.b_scan(0,despeckle='Median')
+        fig = plt.figure()
+        plt.subplot(151)
+
         plt.imshow(BScan_orig)
-        plt.subplot(142)
+        plt.xlabel('Original B scan')
+        plt.subplot(152)
         plt.imshow(reshape_output)
-
-        plt.subplot(143)
+        plt.xlabel('reshape without denoising')
+        plt.subplot(153)
         plt.imshow(reshape_NAWT_despeckle)
-
-        plt.subplot(144)
+        plt.xlabel('NAWT denoising denoising')
+        plt.subplot(154)
         plt.imshow(reshape_Bilateral_despeckle)
-        #plt.imshow(mean_reshape)
+        plt.xlabel('Bilateral denoising')
+
+        plt.subplot(155)
+        plt.imshow(median)
+        plt.xlabel('Median filtered reconstruction')
+
         plt.show()
+        fig.savefig("./figures/despeckle.png")
+        noise_CNR = cnr.CNR(reshape_output)
+        median_CNR = cnr.CNR(median)
+        bilat_CNR = cnr.CNR(reshape_Bilateral_despeckle)
+        nawt_CNR = cnr.CNR(reshape_NAWT_despeckle)
+        print("old cnr , median CNR, bilat CNR, NAWT CNR", noise_CNR, median_CNR, bilat_CNR, nawt_CNR)
+
         
-        #new_CNR = cnr.CNR(reshape_output)
-        #old_CNR = cnr.CNR(basic_output)
-        #print("old CNR , new CNR", old_CNR, new_CNR)
-        #assert(new_CNR > old_CNR)

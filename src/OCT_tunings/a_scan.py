@@ -5,7 +5,7 @@ import math
 import pdb
 from scipy import signal as signal_lib
 
-import src.OCTune_processing.fall_off.fall_off_correct as fc
+import src.OCT_tunings.fall_off.fall_off_correct as fc
 import matplotlib.pyplot as plt
 
 def bary_interpolation(signal):
@@ -21,11 +21,11 @@ def bary_interpolation(signal):
   pi = math.pi
   for peaki, peak in enumerate(peaks):
     dz = dz_Os[peaki]
-    signal[peak] = signal[peak] * ((2 * pi * dz)/ math.sin(pi * dz)) * ((1 - dz * dz) )# / (0.5 * dz * dz))
+    signal[peak] = signal[peak] * ((2 * pi * dz)/ math.sin(pi * dz)) * ((1 - dz * dz) )
   return signal    
 
 def dz_relation(ym_1,ym,ym1):
-  # CONSTANT ALERT
+  # THIS CONSTANT IS THE AXIAL RESOLUTION (or pixel size)
   Dz = (9.5 * math.pow(10, -6))
   if ym1 > ym_1:
     return (2 * ym1 - ym) / (ym + ym1) * Dz
@@ -45,9 +45,12 @@ class AScan(AScan):
   def range_envelope(self,spectrum):
     positive_real_freqs = fftpack.fft(spectrum)[1:512]
     #positive_real_freqs = fftpack.idct(spectrum,type=1)
-    return fc.fall_off_correct(np.abs(positive_real_freqs))[8:]
-
+    return (np.abs(positive_real_freqs))[8:]
+    '''
+    for fall off correction:
+      return fc.fall_off_correct(np.abs(positive_real_freqs))[8:]
+    '''
   def correction_method(self):
     powervals = self.range_envelope(self.deconv_interpolated_spectrum)
     crisp_signal = bary_interpolation(powervals)
-    return crisp_signal # self.to_grayscale(crisp_signal).astype("int")
+    return crisp_signal

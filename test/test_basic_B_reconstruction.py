@@ -43,7 +43,7 @@ class TestBasicB:
     print("RMSE",RMSE)
     return RMSE < e
 
-  def test_B_reconstruction(self,method=bc,tolerance=1024):
+  def test_B_reconstruction(self,method=bc,tolerance=15000):
     desired = self.read_first_B_scan(self.a_test_data_dir)
 
     BScan = method.BScan(self.a_test_data_dir)

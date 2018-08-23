@@ -9,9 +9,11 @@ import numpy as np
 
 import test.test_basic_B_reconstruction as basc
 import src.basic_correct.b_scan as bc
-import src.OCTune_processing.b_scan as rbc
+import src.OCT_tunings.b_scan as rbc
 
+'''Warning this test writes in project dir/out directory
 
+'''
 
 class TestSaveAll():
     
@@ -26,21 +28,7 @@ class TestSaveAll():
         subdir = 'tooth'
         test_dir = path.join(out_data,subdir)
         proccesing_out_dir = path.join(out_data, 'tooth')
-        rbc.BScan(path.join(os.getcwd(),'../data',subdir)).all_b_scans(proccesing_out_dir)
+        rbc.BScan(path.join(os.getcwd(),'../data',subdir)).save_all_b_scans(proccesing_out_dir)
 
         assert(os.path.exists(proccesing_out_dir))
-        '''
-        #pdb.set_trace()
-        plt.subplot(131)
-        plt.imshow(basic_output)
-        plt.subplot(132)
-        plt.imshow(reshape_output)
-
-        plt.subplot(133)
-        plt.imshow(BScan_orig)
-        plt.show()
-        '''
-        #new_CNR = cnr.CNR(reshape_output)
-        #old_CNR = cnr.CNR(basic_output)
-        #print("old CNR , new CNR", old_CNR, new_CNR)
-        #assert(new_CNR > old_CNR)
+        

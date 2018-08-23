@@ -9,7 +9,7 @@ import numpy as np
 
 import test.test_basic_B_reconstruction as basc
 import src.basic_correct.b_scan as bc
-import src.OCTune_processing.b_scan as rbc
+import src.OCT_tunings.b_scan as rbc
 import src.CNR.cnr as cnr
 import src.ADC.contrast_full_range_stretch_ADC as crange_ADC
 import src.ADC.contrast_stretch_ADC as const_stretch_ADC
@@ -33,6 +33,7 @@ class TestCompareMethods():
 
         reshape_output_c_range = reshape_crange.b_scan(0,despeckle=None)
         
+        figure = plt.figure()
         plt.title('Comparison between previous reconstruction, port and our method')
         plt.subplot(131)
         plt.imshow(BScan_orig)
@@ -42,9 +43,11 @@ class TestCompareMethods():
         plt.xlabel('Our ported version of the code')
         plt.subplot(133)
         plt.imshow(reshape_output_c_range)
-        plt.xlabel('Our denoised spectral and fall-off corrected reconstruction')
+        plt.xlabel('spectral and fall-off corrected reconstruction')
         plt.show()
-
+        figure.savefig("./figures/contrast.png")
+        
+        # although contrast is better for same ADC, the tone mapped ADC naturally has better contrast
         new_CNR = cnr.CNR(reshape_output_c_range)
         old_CNR = cnr.CNR(basic_output_c_stretch)
         print("old CNR , new CNR", old_CNR, new_CNR)

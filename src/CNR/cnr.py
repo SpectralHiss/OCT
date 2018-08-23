@@ -8,7 +8,7 @@ import numpy as np
 import pdb
 
 num_segs = 3
-DEBUG = True
+DEBUG = False # this draws the segmentation clustering for illustration
 
 def CNR(nparr_img,method=2):
   

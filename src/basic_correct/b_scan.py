@@ -18,13 +18,20 @@ class BScan():
     self.conf = conf.Conf(directory)
     self.ADC = ADC
 
+  def save_all_b_scans(self,folder='Basic/BScan'):
+    out_dir = path.join(self.test_dir,folder)
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+
+    for num in range(self.conf.numB):
+      pil_B_scan = Image.fromarray(self.b_scan(num))
+      out_file = path.join(out_dir, str(num)+".png")
+      pil_B_scan.save(out_file, 'png')
+
   def read_B_spectrums(self,test_dir,index):
     print(test_dir)
     assert(index < self.conf.numB)
-    '''
-    if(!hasattr(self,spectra_file)):
-      self.spectra_file = open(path.join(test_dir,"Spectra.bin"), 'rb')
-    '''
+
     with open(path.join(test_dir,"Spectra.bin"), 'rb') as f:
       f.seek(index * self.conf.B_width * self.conf.spectrum_size * 2) # reading in 16 bits = 2bytes
       spectrums = []

@@ -17,9 +17,9 @@ class BScan(bbscan.BScan):
   def __init__(self,dir,ADC=ADC.ADC()):
     super(BScan,self).__init__(dir, ADC)
 
-  def all_b_scans(self,dir):
-
-    out_dir = path.join(dir,'tuned-B-Scan/BScan')
+  def save_all_b_scans(self):
+    folder='tuned-B-Scan/BScan'
+    out_dir = path.join(self.test_dir,folder)
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
 
@@ -44,9 +44,12 @@ class BScan(bbscan.BScan):
     if(despeckle == 'bilateral'):
       from .despeckle.bilateral_filter import despeckle
       image = despeckle(image)
+    if(despeckle == 'Median'):
+      pilimg = PIL.Image.fromarray(image.astype("float")).convert('RGB')
+      median_filtered = pilimg.filter(ImageFilter.MedianFilter(5))
+      image = np.asarray(median_filtered.convert('L'))
     
     pilimg = PIL.Image.fromarray(image.astype("float")).convert('L')
-    #smooth_img = pilimg.filter(ImageFilter.SMOOTH)
 
     numpy_img = np.asarray(pilimg)
     return numpy_img
