@@ -9,6 +9,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pdb
 
+
+import src.CNR.cnr as cnr
+
 class TestBasicB:
   
 
@@ -48,6 +51,6 @@ class TestBasicB:
 
     BScan = method.BScan(self.a_test_data_dir)
     out = BScan.b_scan(0)
-    
+    print(cnr.CNR(out))
     #assert(len(out) == len(desired))
     assert self.within_e_RMSE_IMG(desired, out,tolerance)

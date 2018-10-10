@@ -34,13 +34,15 @@ class AScan:
   
   def a_scan(self, spectrum):
 
-    #pdb.set_trace()
+    
     np_deconv = self.deconv_method(spectrum)
 
     spline = interpolate.splrep(np.arange(0,1024), np_deconv, s=0)
     xnew = np.array(self.resampling_table, dtype='float32')
     self.deconv_interpolated_spectrum = np.float32(interpolate.splev(xnew,spline))
-    return self.correction_method()
+    a_scan = self.correction_method()
+    #pdb.set_trace()
+    return a_scan
 
 
   def range_envelope(self,spectrum):

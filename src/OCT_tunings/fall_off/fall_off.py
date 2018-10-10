@@ -8,7 +8,7 @@ import numpy as np
 import math
 
 def falloff_model(z, b):
-  return np.exp(-b * z) 
+  return  np.exp(-b * z * z) 
 
 import pdb
 
@@ -23,16 +23,18 @@ for i in range(512):
 #plt.plot(signal)
 
 peak_i = sg.find_peaks_cwt(signal, np.arange(2,7))
-peak_i = peak_i[1:20]
 peaks = []
 
 for idx in peak_i:
   peaks.append(signal[idx])
 
+plt.plot(signal)
+plt.plot(peak_i,peaks)
+
 '''
 bounds are parameters infered from K.Chan paper systems with different spot sizes
 '''
-popt, pcov = curve_fit(falloff_model, peak_i,peaks,bounds=((0.001,0.01)))
+popt, pcov = curve_fit(falloff_model, peak_i,peaks,bounds=((0.0001,0.01)))
 
 plt.plot([falloff_model(x, popt[0]) for x in range(512)])
 plt.show()

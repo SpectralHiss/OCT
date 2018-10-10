@@ -18,7 +18,7 @@ def despeckle(image):
 
   mean_image = image - np.mean(image)
 
-  coefs = pywt.wavedec2(mean_image, 'db4',level=4)
+  coefs = pywt.wavedec2(mean_image, 'haar',level=4)
 
   # estimate real noise variance through HH band (high variance of level 1 db)
   noise_variance = np.median(np.abs(coefs[1][0])) / 0.6745
@@ -43,7 +43,7 @@ def despeckle(image):
   for lvl_i, lvl in enumerate(level_noise):
     level_subband_thresholds = []
     for band_i, band in enumerate(level_noise[lvl_i]):
-      level_subband_thresholds.append(5*level_noise[lvl_i][band_i]/math.sqrt(np.max(signal_band_vars[lvl_i][band_i] - noise_variance,0)))
+      level_subband_thresholds.append(level_noise[lvl_i][band_i]/math.sqrt(np.max(signal_band_vars[lvl_i][band_i] - noise_variance,0)))
     thresholds.append(level_subband_thresholds)
 
   # pywavelets provides the fast wavelet decomposition method

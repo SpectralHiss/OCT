@@ -12,6 +12,9 @@ import src.basic_correct.b_scan as bc
 import src.OCT_tunings.b_scan as rbc
 import src.CNR.cnr as cnr
 
+import src.ADC.contrast_stretch_ADC as ADC
+
+
 class TestCompareMethods():
     
     def test_side_by_side(self):
@@ -21,13 +24,13 @@ class TestCompareMethods():
         subdir = 'tooth'
         test_dir = path.join(data_dir,subdir)
 
-        reshape = rbc.BScan(test_dir)
+        reshape = rbc.BScan(test_dir,ADC=ADC.ADC())
 
         BScan_orig = basc.TestBasicB().read_first_B_scan(test_dir)
-        reshape_output = reshape.b_scan(0)
+        reshape_output = reshape.b_scan(0,despeckle=None)
         reshape_NAWT_despeckle = reshape.b_scan(0,despeckle='NAWT')
 
-        reshape_Bilateral_despeckle = reshape.b_scan(0,despeckle='bilateral')
+        #reshape_Bilateral_despeckle = reshape.b_scan(0,despeckle='bilateral')
 
 
         median = reshape.b_scan(0,despeckle='Median')
@@ -42,9 +45,9 @@ class TestCompareMethods():
         plt.subplot(153)
         plt.imshow(reshape_NAWT_despeckle)
         plt.xlabel('NAWT denoising denoising')
-        plt.subplot(154)
-        plt.imshow(reshape_Bilateral_despeckle)
-        plt.xlabel('Bilateral denoising')
+        #plt.subplot(154)
+        #plt.imshow(reshape_Bilateral_despeckle)
+        #plt.xlabel('Bilateral denoising')
 
         plt.subplot(155)
         plt.imshow(median)
@@ -54,8 +57,8 @@ class TestCompareMethods():
         fig.savefig("./figures/despeckle.png")
         noise_CNR = cnr.CNR(reshape_output)
         median_CNR = cnr.CNR(median)
-        bilat_CNR = cnr.CNR(reshape_Bilateral_despeckle)
+        #bilat_CNR = cnr.CNR(reshape_Bilateral_despeckle)
         nawt_CNR = cnr.CNR(reshape_NAWT_despeckle)
-        print("old cnr , median CNR, bilat CNR, NAWT CNR", noise_CNR, median_CNR, bilat_CNR, nawt_CNR)
+        print("old cnr , median CNR, bilat CNR, NAWT CNR", noise_CNR, median_CNR)#, bilat_CNR, nawt_CNR)
 
         

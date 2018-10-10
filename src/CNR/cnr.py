@@ -28,8 +28,8 @@ def CNR(nparr_img,method=2):
       else:
         p1.append([numpy_img[row][column]])
 
-  kmeans = KMeans(init=np.array([[np.min(numpy_img)], [int(np.median(numpy_img))],[np.max(numpy_img)]]), n_clusters=num_segs)
-  #kmeans = KMeans(init='k-means++', n_clusters=num_segs)
+  #kmeans = KMeans(init=np.array([[np.min(numpy_img)], [int(np.median(numpy_img))],[np.max(numpy_img)]]), n_clusters=num_segs)
+  kmeans = KMeans(init='k-means++', n_clusters=num_segs)
   kmeans.fit(p1)
 
   seg_map = kmeans.labels_.reshape(im1.size[::-1])

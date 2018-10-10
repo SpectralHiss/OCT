@@ -19,7 +19,7 @@ class TestCompareMethods():
     def test_side_by_side(self):
         data_dir = path.join(os.getcwd() , "../data")
         subdirs = [subdir for subdir in os.listdir(data_dir)]
-        subdir = subdirs[int(random.random()* len(subdirs))]
+        #subdir = subdirs[int(random.random()* len(subdirs))]
         subdir = 'tooth'
         test_dir = path.join(data_dir,subdir)
 
@@ -43,7 +43,7 @@ class TestCompareMethods():
         plt.xlabel('Our ported version of the code')
         plt.subplot(133)
         plt.imshow(reshape_output_c_range)
-        plt.xlabel('spectral and fall-off corrected reconstruction')
+        plt.xlabel('spectral corrected reconstruction')
         plt.show()
         figure.savefig("./figures/contrast.png")
         
